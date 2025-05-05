@@ -32,7 +32,7 @@ sudo mkswap /swapfile
 ```shell
 sudo swapon /swapfile
 ```
-Добавление в `/etc/fstab`
+Добавление в `/etc/fstab` \
 Устаналвиваем текстовый рекдактор `nano`
 ```shell
 apt install nano
@@ -99,7 +99,7 @@ app_update 380870 validate
 ```shell
 exit
 ```
-## Шаг №3. Проверка запуска
+## Шаг №4. Проверка запуска
 ```shell
 cd
 ```
