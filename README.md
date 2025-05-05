@@ -11,7 +11,7 @@
 
 ## Шаг №2. Настройка сервера
 Речь сейчас пойдёт не про настройку Project Zomboid. А про настройку самого VPS. \
-\
+
 ## Обновление системы:
 ```shell
 sudo apt-get update && apt-get upgrade
@@ -110,5 +110,6 @@ cd pzserver
 ```shell
 ./start-server.sh
 ```
-
+Пример:
+![image](https://github.com/user-attachments/assets/007d7a70-29cb-49ee-9e03-ad07abc31ba5)
 
