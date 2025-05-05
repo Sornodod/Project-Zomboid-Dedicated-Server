@@ -323,6 +323,26 @@ if __name__ == '__main__':
     
     application.run_polling()
 ```
+Даём боту разрешения для запуска служб:
+```shell
+sudo nano /etc/sudoers.d/pzuser
+```
+Пишем в файле:
+```ini
+pzuser ALL=NOPASSWD: /bin/systemctl
+```
+И выполним ещё вот эту команду:
+```shell
+sudo chmod 0440 /etc/sudoers.d/pzuser
+```
+
+И не забываем установить библиотеки к боту:
+```shell
+pip3 install python-telegram-bot
+```
+```shell
+pip3 install subprocess
+```
 Всё так же создаём службу:
 ```shell
 sudo nano /etc/systemd/system/pzbot.service
