@@ -110,6 +110,88 @@ cd pzserver
 ```shell
 ./start-server.sh
 ```
-Пример:
+При первом запуске сервера скрипт попросит нас ввести пароль от админа. Придумываем пароль.
+![image](https://github.com/user-attachments/assets/850fe429-025d-4ffb-ad1f-0cbe4b5b8a11)
+
+
+Пример того что сервер запустился:
 ![image](https://github.com/user-attachments/assets/007d7a70-29cb-49ee-9e03-ad07abc31ba5)
+
+Далее идём в Project Zomboid, в вкладку "Сетевая". И заполяняем поля:
+ * Имя сервера: любое. Абсолютно не имеет значения;
+ * IP: ip нашего VPS сервера;
+ * Локальный IP: не заполняем;
+ * Порт: если мы его не меняли, то по дефолту будет 16261;
+ * Пароль сервера: по дефолту его нет;
+ * Описание: любое. Не имееет значения;
+ * Имя: это имя нашего персонажа;
+ * Пароль: это пароль от персонажа;
+ * Использовать Steam Relay: галочку можно не ставить.
+
+Нажимаем "Сохранить".
+## Как войти из под админа?
+Помните мы ранее пароль задавали от админа? \
+Так вот, в поле "Имя" вводим "admin", в поле "Пароль" вводим ранее заданный в консоли пароль. Таким образом можем войти из под админа.
+#Шаг №4. Автозапуск
+Как только мы убедились что сервер запустился то можно его пустить в автозапуск путём создания службы.
+```shell
+sudo nano /etc/systemd/system/pzserver.service
+```
+Далее вписываем туда вот такое содержимое:
+```ini
+[Unit]
+Description=Project Zomboid Server
+After=network.target
+
+[Service]
+Type=simple
+User=pzuser
+WorkingDirectory=/home/pzuser/pzserver
+ExecStart=/home/pzuser/pzserver/start-server.sh
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+```
+Перезапускаем systemd-демона:
+```shell
+sudo systemctl daemon-reload
+```
+Включаем в автозапуск всё это дело:
+```shell
+systemctl enable pzserver.service
+```
+Запускаем службу:
+```shell
+systemctl start pzserver.service
+```
+Логи можно посмотреть так в реальном времени:
+```shell
+journalctl -u pzserver.service -f
+```
+# Как ставить моды
+На самом деле всё просто. \
+Допустим мы хотим добавить мод на Автобус - Autotsar Tuning Atelier - Bus [TUNING 2.0] [  ](https://steamcommunity.com/sharedfiles/filedetails/?id=2592358528) \
+Спускаемся в самый низ странички мода пока не увидим заветные строки:
+* Workshop ID: 2592358528
+* Mod ID: ATA_Bus
+
+Запомнили эти IDшники и полезли менять конфиг сервера:
+```shell
+nano ~/Zomboid/Server/servertest.ini
+```
+Ищем строки `Mods=` и `WorkshopItems=` и добавляем туда ID скопированные выше. Должно получится так:
+```ini
+Mods=ATA_Bus
+WorkshopItems=2592358528
+```
+Всё. Перезапускаем сервер и готово. Сервер сам скачает и установит моды. Перезапустить сервер можно так:
+```shell
+systemctl restart pzserver.service
+```
+# Бот для управления сервером Project Zomboid.
+Предположим мы не хотим что бы в наше отсуствие шло время на сервере. А то вдруг, мы вернёмся в игру спустя неделю реального времени, а тут зима. \
+Ну или мы хотим перезапустить сервер, а по SSH прыгать не очень хочется. \
+В таком случае можно кинуть на сервер бота что приложен в данном репозитории. \
+Только не забудьте поменять `API_TOKEN` и `ADMIN_CHAT_ID`.
 
